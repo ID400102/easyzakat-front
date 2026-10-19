@@ -1,8 +1,8 @@
 import Header from "../../layouts/Header";
-import CauseIntro from "../../components/client/Cause/CauseIntro";
-import DonationRecommendation from "../../components/client/Cause/DonationRecommendation";
-import CategoryFilters from "../../components/client/Cause/CategoryFilters";
-import CauseList from "../../components/client/Cause/CauseList";
+import CauseIntro from "../../components/Client/Cause/CauseIntro";
+import DonationRecommendation from "../../components/Client/Cause/DonationRecommendation";
+import CategoryFilters from "../../components/Client/Cause/CategoryFilters";
+import CauseList from "../../components/Client/Cause/CauseList";
 import BottomNav from "../../layouts/BottomNav";
 import Footer from "../../layouts/Footer";
 
