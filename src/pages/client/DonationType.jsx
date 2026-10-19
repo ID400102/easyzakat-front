@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import Header from "../../layouts/Header";
-import TypeIntro from "../../components/client/DonationType/TypeIntro";
-import TypeList from "../../components/client/DonationType/TypeList";
-import AmountForm from "../../components/client/DonationType/AmountForm";
+import TypeIntro from "../../components/Client/DonationType/TypeIntro";
+import TypeList from "../../components/Client/DonationType/TypeList";
+import AmountForm from "../../components/Client/DonationType/AmountForm";
 import BottomNav from "../../layouts/BottomNav";
 
 function DonationType() {

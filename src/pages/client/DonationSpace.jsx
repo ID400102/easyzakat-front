@@ -1,14 +1,14 @@
-import { DEFAULT_DASHBOARD_DATA } from "../../components/client/DonationSpace/SpaceData";
+import { DEFAULT_DASHBOARD_DATA } from "../../components/Client/DonationSpace/SpaceData";
 
-import SpaceIntro from "../../components/client/DonationSpace/SpaceIntro";
-import DonationOverview from "../../components/client/DonationSpace/DonationOverview";
-import QuickActions from "../../components/client/DonationSpace/QuickActions";
-import RecentDonations from "../../components/client/DonationSpace/RecentDonations";
-import FinancialSerenity from "../../components/client/DonationSpace/FinancialSerenity";
+import SpaceIntro from "../../components/Client/DonationSpace/SpaceIntro";
+import DonationOverview from "../../components/Client/DonationSpace/DonationOverview";
+import QuickActions from "../../components/Client/DonationSpace/QuickActions";
+import RecentDonations from "../../components/Client/DonationSpace/RecentDonations";
+import FinancialSerenity from "../../components/Client/DonationSpace/FinancialSerenity";
 import Header from "../../layouts/Header";
 import Footer from "../../layouts/Footer";
 import BottomNav from "../../layouts/BottomNav";
-import DonationImpactCard from "../../components/client/DonationSpace/DonationImpactCard";
+import DonationImpactCard from "../../components/Client/DonationSpace/DonationImpactCard";
 
 function DonorDashboard({
   dashboardData = DEFAULT_DASHBOARD_DATA,

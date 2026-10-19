@@ -1,9 +1,9 @@
-import LandingHeader from "../../components/client/Landing/LandingHeader";
+import LandingHeader from "../../components/Client/Landing/LandingHeader";
 import BottomNav from "../../layouts/BottomNav";
-import LandingHero from "../../components/client/Landing/LandingHero";
-import Statistics from "../../components/client/Landing/Statistics";
-import HowItWorks from "../../components/client/Landing/HowItWorks";
-import CampaignList from "../../components/client/Landing/CampaignList";
+import LandingHero from "../../components/Client/Landing/LandingHero";
+import Statistics from "../../components/Client/Landing/Statistics";
+import HowItWorks from "../../components/Client/Landing/HowItWorks";
+import CampaignList from "../../components/Client/Landing/CampaignList";
 import Footer from "../../layouts/Footer";
 
 
