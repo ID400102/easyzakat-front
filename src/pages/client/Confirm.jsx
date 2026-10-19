@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 // import html2canvas from "html2canvas-pro";
 // import { jsPDF } from "jspdf";
-import DonationSuccess from "../../components/client/Confirm/DonationSuccess";
-import TransactionReceipt from "../../components/client/Confirm/TransactionReceipt";
-import DonationActions from "../../components/client/Confirm/DonationActions";
+import DonationSuccess from "../../components/Client/Confirm/DonationSuccess";
+import TransactionReceipt from "../../components/Client/Confirm/TransactionReceipt";
+import DonationActions from "../../components/Client/Confirm/DonationActions";
 import Header from "../../layouts/Header";
 import BottomNav from "../../layouts/BottomNav";
 import Footer from "../../layouts/Footer";
