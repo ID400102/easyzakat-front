@@ -14,7 +14,7 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Gérer les champs
+  // Gérer les champs du formulaire
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -31,28 +31,37 @@ function Login() {
     setLoading(true);
 
     try {
-      const data = await loginUser(formData);
+      const response = await loginUser(formData);
 
-      console.log("Connexion réussie :", data);
+      console.log("Connexion réussie :", response);
 
-      // Sauvegarder le token
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
+      // Accepter une réponse directe ou une réponse dans data
+      const authData = response.data || response;
 
-      // Sauvegarder l'utilisateur
-      if (data.user) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify(data.user)
+      const token = authData.token;
+      const user = authData.user;
+
+      if (!token || !user) {
+        throw new Error(
+          "Le backend n'a pas retourné le token ou les informations utilisateur."
         );
       }
 
+      // Enregistrer la session
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
       setMessage("Connexion réussie !");
 
-      // Aller directement vers l'administration
+      // Rediriger selon le rôle réel de l'utilisateur
+      const role = String(user.role || "").toLowerCase();
+
       setTimeout(() => {
-        navigate("/Home");
+        if (role === "admin" || role === "superadmin") {
+          navigate("/admin", { replace: true });
+        } else {
+          navigate("/home", { replace: true });
+        }
       }, 500);
 
     } catch (err) {
@@ -61,7 +70,6 @@ function Login() {
       setError(
         err.message || "Email ou mot de passe incorrect."
       );
-
     } finally {
       setLoading(false);
     }
@@ -69,12 +77,10 @@ function Login() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#f8f9fc] px-4">
-
       <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-sm sm:p-8">
 
         {/* TITRE */}
         <div className="text-center">
-
           <h1 className="text-2xl font-bold text-[#003f35]">
             Bienvenue sur EasyZakat
           </h1>
@@ -82,7 +88,6 @@ function Login() {
           <p className="mt-2 text-sm text-gray-500">
             Connectez-vous à votre compte
           </p>
-
         </div>
 
         {/* MESSAGE SUCCÈS */}
@@ -104,10 +109,8 @@ function Login() {
           onSubmit={handleSubmit}
           className="mt-8 space-y-5"
         >
-
           {/* EMAIL */}
           <div>
-
             <label className="mb-2 block text-sm font-semibold">
               Email
             </label>
@@ -121,12 +124,10 @@ function Login() {
               required
               className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#005b49]"
             />
-
           </div>
 
           {/* MOT DE PASSE */}
           <div>
-
             <label className="mb-2 block text-sm font-semibold">
               Mot de passe
             </label>
@@ -140,19 +141,16 @@ function Login() {
               required
               className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#005b49]"
             />
-
           </div>
 
           {/* MOT DE PASSE OUBLIÉ */}
           <div className="text-right">
-
             <Link
               to="/mdp"
               className="text-sm text-[#005b49] underline"
             >
               Mot de passe oublié ?
             </Link>
-
           </div>
 
           {/* BOUTON */}
@@ -161,16 +159,12 @@ function Login() {
             disabled={loading}
             className="w-full rounded-xl bg-[#005b49] py-3 font-bold text-white transition hover:bg-[#00483b] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading
-              ? "Connexion..."
-              : "Se connecter"}
+            {loading ? "Connexion..." : "Se connecter"}
           </button>
-
         </form>
 
         {/* INSCRIPTION */}
         <p className="mt-6 text-center text-sm text-gray-500">
-
           Vous n'avez pas de compte ?{" "}
 
           <Link
@@ -179,11 +173,9 @@ function Login() {
           >
             Créer un compte
           </Link>
-
         </p>
 
       </div>
-
     </div>
   );
 }

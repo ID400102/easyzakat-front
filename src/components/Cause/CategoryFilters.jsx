@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 const categories = [
   "Tous",
@@ -10,18 +9,13 @@ const categories = [
   "Financement",
 ];
 
-function CategoryFilters() {
-  const [activeCategory, setActiveCategory] = useState("Tous");
-
+function CategoryFilters({ activeCategory, onCategoryChange }) {
   return (
     <section className="w-full">
       <div
         className="
-          flex
-          w-full
-          gap-2
-          overflow-x-auto
-          pb-1
+          flex w-full gap-2
+          overflow-x-auto pb-1
           scrollbar-none
         "
       >
@@ -32,19 +26,15 @@ function CategoryFilters() {
             <button
               key={category}
               type="button"
-              onClick={() => setActiveCategory(category)}
+              onClick={() => onCategoryChange(category)}
+              aria-pressed={isActive}
               className={`
                 shrink-0
-                sm:flex-1
-                sm:w-full
+                sm:flex-1 sm:w-full
                 rounded-full
-                px-[18px]
-                py-[9px]
-                text-[12px]
-                font-medium
-                transition
-                duration-200
-                
+                px-[18px] py-[9px]
+                text-[12px] font-medium
+                transition duration-200
                 ${
                   isActive
                     ? "bg-[#005B4F] text-white"
@@ -59,6 +49,6 @@ function CategoryFilters() {
       </div>
     </section>
   );
-};
+}
 
 export default CategoryFilters;

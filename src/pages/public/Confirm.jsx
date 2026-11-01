@@ -1,6 +1,8 @@
+
 import { useLocation, useNavigate } from "react-router-dom";
-// import html2canvas from "html2canvas-pro";
-// import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas-pro";
+import { jsPDF } from "jspdf";
+
 import DonationSuccess from "../../components/Confirm/DonationSuccess";
 import TransactionReceipt from "../../components/Confirm/TransactionReceipt";
 import DonationActions from "../../components/Confirm/DonationActions";
@@ -8,9 +10,7 @@ import Header from "../../layouts/Header";
 import BottomNav from "../../layouts/BottomNav";
 import Footer from "../../layouts/Footer";
 
-import {
-  DONATION_ACTIONS,
-} from "../../components/Confirm/DonationConfirmationData";
+import { DONATION_ACTIONS } from "../../components/Confirm/DonationConfirmationData";
 
 function formatPaymentMethod(method) {
   const methods = {
@@ -39,7 +39,6 @@ function Confirm() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Informations transmises depuis Payment.jsx
   const {
     paymentId,
     amount,
@@ -53,7 +52,6 @@ function Confirm() {
     paymentDate,
   } = location.state || {};
 
-  // Récupérer la campagne sauvegardée dans le navigateur
   let savedCampaign = {};
 
   try {
@@ -64,13 +62,11 @@ function Confirm() {
     console.error("Erreur de lecture de la campagne :", error);
   }
 
-  // Vérifier que la campagne enregistrée correspond à celle choisie
   const savedCampaignMatches =
     campaignId != null &&
     savedCampaign.id != null &&
     String(campaignId) === String(savedCampaign.id);
 
-  // Priorité au nom transmis par les pages précédentes
   const finalCampaignName =
     campaignName ||
     (savedCampaignMatches
@@ -88,29 +84,21 @@ function Confirm() {
     (savedCampaignMatches ? savedCampaign.image : "") ||
     "";
 
-  // Informations affichées sur le reçu
   const transactionDate = paymentDate
     ? new Date(paymentDate)
     : new Date();
 
   const transaction = {
     id: paymentId || "EZ-PAY",
-
     date: transactionDate.toLocaleDateString("fr-FR"),
-
     time: transactionDate.toLocaleTimeString("fr-FR", {
       hour: "2-digit",
       minute: "2-digit",
     }),
-
     zakatType: formatDonationType(donationType),
-
     amount: Number(amount || 0),
-
     currency: "FCFA",
-
     paymentMethod: formatPaymentMethod(paymentMethod),
-
     status:
       paymentStatus === "success"
         ? "Paiement confirmé"
@@ -130,13 +118,15 @@ function Confirm() {
     verified: false,
   };
 
-  // 1. Télécharger le reçu en PDF
+  // Télécharger le reçu au format PDF
   const handleDownload = async () => {
     try {
       const receipt = document.getElementById("transaction-receipt");
 
       if (!receipt) {
-        alert("Le reçu est introuvable.");
+        alert(
+          "Le reçu est introuvable. Vérifie que TransactionReceipt.jsx possède l'identifiant transaction-receipt."
+        );
         return;
       }
 
@@ -144,6 +134,7 @@ function Confirm() {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
+        logging: false,
       });
 
       const pdf = new jsPDF("p", "mm", "a4");
@@ -152,19 +143,25 @@ function Confirm() {
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 10;
 
+      const availableWidth = pageWidth - margin * 2;
+      const availableHeight = pageHeight - margin * 2;
+
       const ratio = Math.min(
-        (pageWidth - margin * 2) / canvas.width,
-        (pageHeight - margin * 2) / canvas.height
+        availableWidth / canvas.width,
+        availableHeight / canvas.height
       );
 
       const width = canvas.width * ratio;
       const height = canvas.height * ratio;
 
+      const x = (pageWidth - width) / 2;
+      const y = margin;
+
       pdf.addImage(
         canvas.toDataURL("image/png"),
         "PNG",
-        (pageWidth - width) / 2,
-        (pageHeight - height) / 2,
+        x,
+        y,
         width,
         height
       );
@@ -176,12 +173,14 @@ function Confirm() {
 
       pdf.save(`recu-easyzakat-${safeId}.pdf`);
     } catch (error) {
-      console.error("Erreur PDF :", error);
-      alert("Impossible de télécharger le reçu.");
+      console.error("Erreur lors de la création du PDF :", error);
+      alert(
+        "Le téléchargement du reçu a échoué. Vérifie la console du navigateur."
+      );
     }
   };
 
-  // 2. Partager le récapitulatif sur WhatsApp
+  // Partager le récapitulatif sur WhatsApp
   const handleShare = () => {
     const message = [
       "REÇU DE DON - EASYZAKAT",
@@ -200,12 +199,12 @@ function Confirm() {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  // 3. Accéder au tableau de bord administrateur
+  // Aller au dashboard administrateur
   const handleDashboard = () => {
-    navigate("/profil");
+    navigate("/Profil");
   };
 
-  // 4. Recommencer un nouveau don
+  // Recommencer un nouveau don
   const handleNewDonation = () => {
     localStorage.removeItem("easyzakat_selected_campaign");
 
@@ -221,7 +220,7 @@ function Confirm() {
     <div>
       <Header />
 
-      <main className="min-h-screen bg-[#f8f8ff] mb-20 text-gray-900">
+      <main className="mb-20 min-h-screen bg-[#f8f8ff] text-gray-900">
         <div className="mx-auto w-full max-w-[760px]">
           <DonationSuccess
             title={

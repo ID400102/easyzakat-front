@@ -1,3 +1,4 @@
+
 import CauseCard from "./CauseCard";
 import orphelin from "../../assets/orphelin.png";
 import podor from "../../assets/podor.png";
@@ -15,7 +16,6 @@ const causes = [
     percentage: 75,
     donors: 240,
   },
-
   {
     id: 2,
     image: podor,
@@ -27,7 +27,6 @@ const causes = [
     percentage: 42,
     donors: 86,
   },
-
   {
     id: 3,
     image: commerce,
@@ -39,7 +38,6 @@ const causes = [
     percentage: 85,
     donors: 412,
   },
-
   {
     id: 4,
     image: commerce,
@@ -53,7 +51,18 @@ const causes = [
   },
 ];
 
-function CauseList() {
+function CauseList({ activeCategory = "Tous" }) {
+  const filteredCauses =
+    activeCategory === "Tous"
+      ? causes
+      : causes.filter((cause) => {
+          if (activeCategory === "Familles") {
+            return cause.category === "Familles";
+          }
+
+          return cause.category === activeCategory;
+        });
+
   return (
     <section
       className="
@@ -61,23 +70,23 @@ function CauseList() {
         w-full
         grid-cols-1
         gap-[18px]
-        
         sm:grid-cols-2
-        
         lg:grid-cols-3
         lg:gap-6
-        
         xl:grid-cols-4
       "
     >
-      {causes.map((cause) => (
-        <CauseCard
-          key={cause.id}
-          {...cause}
-        />
-      ))}
+      {filteredCauses.length > 0 ? (
+        filteredCauses.map((cause) => (
+          <CauseCard key={cause.id} {...cause} />
+        ))
+      ) : (
+        <p className="col-span-full py-8 text-center text-sm text-gray-500">
+          Aucune campagne disponible dans cette catégorie pour le moment.
+        </p>
+      )}
     </section>
   );
-};
+}
 
 export default CauseList;

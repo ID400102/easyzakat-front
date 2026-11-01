@@ -1,5 +1,17 @@
 import { TrendingUp } from "lucide-react";
 
+function formatFCFA(amount) {
+  const value = Number(amount);
+
+  if (!Number.isFinite(value)) {
+    return "—";
+  }
+
+  return `${new Intl.NumberFormat("fr-FR", {
+    maximumFractionDigits: 0,
+  }).format(value)} FCFA`;
+}
+
 function StatCard({ title, amount, children, highlight }) {
   return (
     <div
@@ -22,46 +34,102 @@ function StatCard({ title, amount, children, highlight }) {
   );
 }
 
-export default function ImpactStats() {
+export default function ImpactStats({
+  stats = null,
+  loading = false,
+}) {
+  const totalCollected = Number(stats?.totalCollected ?? 0);
+
+  const totalDistributed = Number(
+    stats?.totalDistributed ?? 0
+  );
+
+  // Solde calculé à partir des données du backend
+  const availableBalance =
+    totalCollected - totalDistributed;
+
+  const distributionPercentage = Number(
+    stats?.distributionPercentage ??
+      (totalCollected > 0
+        ? (totalDistributed / totalCollected) * 100
+        : 0)
+  );
+
+  const displayAmount = (value) => {
+    if (loading) return "Chargement...";
+    if (!stats) return "—";
+
+    return formatFCFA(value);
+  };
+
+  const displayPercentage = () => {
+    if (loading) return "Calcul en cours...";
+    if (!stats) return "Statistiques indisponibles";
+
+    return `${new Intl.NumberFormat("fr-FR", {
+      maximumFractionDigits: 1,
+    }).format(distributionPercentage)}% du montant collecté`;
+  };
+
+  // La largeur visuelle reste comprise entre 0 et 100 %
+  const progressWidth = Math.min(
+    100,
+    Math.max(0, distributionPercentage)
+  );
+
   return (
     <section className="grid gap-4 md:grid-cols-3">
 
+      {/* Total collecté */}
       <StatCard
-        title="TOTAL COLLECTÉ (2026)"
-        amount="450.780.000 FCFA"
+        title="TOTAL COLLECTÉ"
+        amount={displayAmount(totalCollected)}
         highlight={true}
       >
         <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-green-800">
           <TrendingUp size={17} />
-          <span>+12% par rapport à 2025</span>
+
+          <span>
+            {loading
+              ? "Chargement des données..."
+              : stats
+                ? "Données du backend"
+                : "Données indisponibles"}
+          </span>
         </div>
       </StatCard>
 
+      {/* Total redistribué */}
       <StatCard
         title="Redistribué"
-        amount="412.500.000"
+        amount={displayAmount(totalDistributed)}
       >
         <div className="mt-4">
           <div className="h-2 rounded-full bg-gray-100">
-            <div className="h-full w-[91%] rounded-full bg-[#0F3D2E]" />
+            <div
+              className="h-full rounded-full bg-[#0F3D2E] transition-all duration-500"
+              style={{
+                width: `${progressWidth}%`,
+              }}
+            />
           </div>
 
           <p className="mt-2 text-xs text-gray-500">
-            91% du fonds global
+            {displayPercentage()}
           </p>
         </div>
       </StatCard>
 
+      {/* Solde disponible */}
       <StatCard
         title="Solde Disponible"
-        amount="38.280.000"
+        amount={displayAmount(availableBalance)}
       >
         <p className="mt-2 text-xs text-gray-500">
-          Réservé aux urgences
+          Calculé : montant collecté − montant redistribué
         </p>
       </StatCard>
 
     </section>
   );
 }
-
