@@ -19,7 +19,7 @@ export function OrganizationTableRow({ org, onEdit, onDelete }) {
       <td className="py-4 px-4 sm:px-6 text-gray-700 text-sm">
         {org.region}
       </td>
-      <td className="py-4 px-4 sm:px-6 text-gray-700 text-sm font-mono text-xs sm:text-sm">
+      <td className="py-4 px-4 sm:px-6 text-gray-700 text-sm font-mono sm:text-sm">
         {org.contact}
       </td>
       <td className="py-4 px-4 sm:px-6">
