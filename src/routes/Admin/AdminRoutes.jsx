@@ -1,16 +1,16 @@
 import { Routes, Route } from "react-router-dom";
 
 import AdminLayout from "../../layouts/AdminLayout";
+import { AdminMenuItems } from "../../config/navigationConfig";
 
 import AdminDashboard from "../../pages/admin/AdminDashboard";
 import Donors from "../../pages/admin/Donors";
-import Payments from "../../pages/admin/Payments";
+// import Payments from "../../pages/admin/Payments";
 import Campaigns from "../../pages/admin/Campaigns";
-import Organisations from "../../pages/admin/Organisations";
+// import Organisations from "../../pages/admin/Organisations";
 import Beneficiaries from "../../pages/admin/Beneficiaries";
-import Distributions from "../../pages/admin/Distributions";
-import Reports from "../../pages/admin/Reports";
-import Audit from "../../pages/admin/Audit";
+// import Reports from "../../pages/admin/Reports";
+// import Audit from "../../pages/admin/Audit";
 
 function AdminRoutes() {
   
@@ -23,8 +23,7 @@ function AdminRoutes() {
       >
         
         <Route
-          path="/admin"
-          element={<AdminDashboard />}
+          index element={<AdminDashboard />}
         />
 
         <Route
@@ -32,40 +31,35 @@ function AdminRoutes() {
           element={<Donors />}
         />
 
-        <Route
-          path="payments"
+        {/* <Route
+          path="transactions"
           element={<Payments />}
-        />
+        /> */}
 
         <Route
           path="campaigns"
           element={<Campaigns />}
         />
 
-        <Route
+        {/* <Route
           path="organisations"
           element={<Organisations />}
-        />
+        /> */}
 
         <Route
           path="beneficiaries"
           element={<Beneficiaries />}
         />
 
-        <Route
-          path="distributions"
-          element={<Distributions />}
-        />
-
-        <Route
+        {/* <Route
           path="reports"
           element={<Reports />}
-        />
+        /> */}
 
-        <Route
-          path="audits"
+        {/* <Route
+          path="audit"
           element={<Audit />}
-        />
+        /> */}
         
       </Route>
     </Routes>

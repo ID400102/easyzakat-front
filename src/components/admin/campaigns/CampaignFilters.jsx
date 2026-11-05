@@ -15,8 +15,8 @@ function CampaignFilters({
   onStatusChange,
 }) {
   return (
-    <div className="mb-4 flex flex-col gap-3 w-full sm:flex-row">
-      <div className="flex h-11 w-full items-center gap-3 rounded-md border border-[#E2DCCF] bg-white px-3 shadow-sm focus-within:border-[#168568] ">
+    <div className="mb-4 flex flex-col gap-3 sm:flex-row">
+      <div className="flex h-11 w-full items-center gap-3 rounded-md border border-[#E2DCCF] bg-white px-3 shadow-sm focus-within:border-[#168568] sm:max-w-md">
         <Search size={18} className="shrink-0 text-slate-500" />
 
         <input

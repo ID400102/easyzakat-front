@@ -13,10 +13,10 @@ export const AdminMenuItems = [
     permission: "donors:read",
   },
   {
-    name: "Payments",
-    path: "/admin/payments",
+    name: "Transactions",
+    path: "/admin/transactions",
     icon: "CreditCard",
-    permission: "payments:read",
+    permission: "transactions:read",
   },
   {
     name: "Campagnes",
@@ -37,21 +37,15 @@ export const AdminMenuItems = [
     permission: "beneficiaries:read",
   },
   {
-    name: "Distributions",
-    path: "/admin/distributions",
-    icon: "Send",
-    permission: "distributions:read",
-  },
-  {
     name: "Rapports",
-    path: "/admin/reports",
+    path: "/admin/rapports",
     icon: "BarChart3",
     permission: "reports:read",
   },
   {
     name: "Audits",
     path: "/admin/audits",
-    icon: "Shield",
+    icon: "BarChart3",
     permission: "audits:read",
   },
 ];
