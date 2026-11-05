@@ -128,7 +128,7 @@ function CampaignEditModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="campaign-modal-title"
-        className="flex max-h-[95dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-[#FBF9F4] shadow-2xl sm:max-w-2xl sm:rounded-2xl"
+        className="flex max-h-[95dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-[#fbf9f4] shadow-2xl sm:max-w-2xl sm:rounded-2xl"
       >
         <header className="flex items-center justify-between gap-3 border-b border-[#E2DCCF] px-5 py-4 sm:px-6">
           <h2
