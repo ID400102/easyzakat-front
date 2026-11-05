@@ -12,7 +12,7 @@ import CollectionChart from "../../components/admin/dashboard/CollectionChart";
 import PaymentRow from "../../components/admin/dashboard/PaymentRow";
 import MobilePaymentCard from "../../components/admin/dashboard/PaymentCard";
 
-import { payments } from "../../Data/adminData";
+import { payments } from "../../config/navigationConfig";
 
 function AdminDashboard() {
   const [search, setSearch] = useState("");

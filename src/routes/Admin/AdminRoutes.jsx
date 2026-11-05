@@ -4,12 +4,13 @@ import AdminLayout from "../../layouts/AdminLayout";
 
 import AdminDashboard from "../../pages/admin/AdminDashboard";
 import Donors from "../../pages/admin/Donors";
-// import Payments from "../../pages/admin/Payments";
+import Payments from "../../pages/admin/Payments";
 import Campaigns from "../../pages/admin/Campaigns";
 import Organisations from "../../pages/admin/Organisations";
 import Beneficiaries from "../../pages/admin/Beneficiaries";
-// import Reports from "../../pages/admin/Reports";
-// import Audit from "../../pages/admin/Audit";
+import Distributions from "../../pages/admin/Distributions";
+import Reports from "../../pages/admin/Reports";
+import Audit from "../../pages/admin/Audit";
 
 function AdminRoutes() {
   
@@ -31,10 +32,10 @@ function AdminRoutes() {
           element={<Donors />}
         />
 
-        {/* <Route
-          path="transactions"
+        <Route
+          path="payments"
           element={<Payments />}
-        /> */}
+        />
 
         <Route
           path="campaigns"
@@ -51,15 +52,20 @@ function AdminRoutes() {
           element={<Beneficiaries />}
         />
 
-        {/* <Route
+        <Route
+          path="distributions"
+          element={<Distributions />}
+        />
+
+        <Route
           path="reports"
           element={<Reports />}
-        /> */}
+        />
 
-        {/* <Route
-          path="audit"
+        <Route
+          path="audits"
           element={<Audit />}
-        /> */}
+        />
         
       </Route>
     </Routes>

@@ -7,8 +7,9 @@ import {
   Building2,
   HandHeart,
   BarChart3,
+  Shield,
+  Send,
   Settings,
-  X,
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
@@ -21,6 +22,8 @@ const icons = {
   Building2,
   HandHeart,
   BarChart3,
+  Shield,
+  Send,
 };
 
 function Sidebar({
