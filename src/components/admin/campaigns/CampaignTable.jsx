@@ -16,7 +16,7 @@ function CampaignTable({ campaigns, onEdit }) {
 
   return (
     <div className="overflow-x-auto rounded-2xl border border-[#E2DCCF] bg-white">
-      <table className="w-full min-w-[1000px] text-sm">
+      <table className="w-full min-w-250 text-sm">
         <thead className="bg-[#075b45] text-white">
           <tr>
             <th className="px-3 py-3 text-left font-medium">Campagne</th>
