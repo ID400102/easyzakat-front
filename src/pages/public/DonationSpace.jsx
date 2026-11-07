@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -67,9 +66,19 @@ function DonorDashboard() {
 
         const summary = data.summary || {};
 
-        const savedUser = JSON.parse(
-          localStorage.getItem("user") || "null"
-        );
+        // Récupérer les informations de l'utilisateur connecté
+        let savedUser = null;
+
+        try {
+          savedUser = JSON.parse(
+            localStorage.getItem("user") || "null"
+          );
+        } catch (storageError) {
+          console.error(
+            "Impossible de lire les informations utilisateur :",
+            storageError
+          );
+        }
 
         setDashboardData((previous) => ({
           ...previous,
@@ -85,34 +94,49 @@ function DonorDashboard() {
 
           donationStats: {
             ...previous.donationStats,
+
+            // Montant total des dons réussis
             totalDonated: Number(summary.totalDonated ?? 0),
+
+            // Cette statistique n'est pas encore calculée par le backend
             annualChange: null,
-            familiesSupported: Number(summary.familiesSupported ?? 0),
-            foodKits: Number(summary.foodKits ?? 0),
+
+            // Ces deux statistiques ne sont pas fournies par l'API
+            familiesSupported: null,
+            foodKits: null,
           },
 
+          // Historique des cinq derniers dons
           recentDonations: Array.isArray(data.recentDonations)
             ? data.recentDonations.map((donation) => ({
                 id: donation._id || donation.id,
+
                 date: donation.createdAt
                   ? new Date(donation.createdAt).toLocaleDateString("fr-FR")
                   : donation.date || "—",
+
                 type:
                   donation.type ||
                   donation.donationType ||
                   "Don",
+
                 campaign:
                   donation.campaign?.name ||
                   donation.campaign?.title ||
                   donation.campaignName ||
                   "Don général",
+
                 amount: Number(donation.amount ?? 0),
+
+                status: donation.status || "pending",
               }))
             : [],
         }));
+
       } catch (err) {
         console.error("Erreur dashboard donateur :", err);
         setError(err.message || "Erreur de connexion au serveur.");
+
       } finally {
         setLoading(false);
       }
@@ -165,7 +189,10 @@ function DonorDashboard() {
       createdAt: new Date().toISOString(),
     };
 
-    localStorage.setItem("zakatReminder", JSON.stringify(reminder));
+    localStorage.setItem(
+      "zakatReminder",
+      JSON.stringify(reminder)
+    );
 
     setReminderMessage(
       "Votre rappel a été enregistré sur cet appareil."
@@ -181,6 +208,7 @@ function DonorDashboard() {
       <Header />
 
       <div className="mx-auto mb-20 w-full max-w-[1200px] px-5 pb-8 pt-8 sm:px-7 sm:pt-10 md:px-10 lg:px-12 lg:pt-12">
+
         {loading && (
           <p className="mb-4 text-sm text-[#004D43]">
             Chargement de votre profil...
@@ -201,6 +229,7 @@ function DonorDashboard() {
         <DonationOverview stats={dashboardData.donationStats} />
 
         <div className="mt-1 lg:grid lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-6">
+
           <div>
             <QuickActions onAction={handleQuickAction} />
 
@@ -226,6 +255,7 @@ function DonorDashboard() {
                 >
                   <label className="block text-sm text-[#303634]">
                     Date du rappel
+
                     <input
                       type="date"
                       value={reminderDate}
@@ -281,6 +311,7 @@ function DonorDashboard() {
               />
             </div>
           </div>
+
         </div>
       </div>
 

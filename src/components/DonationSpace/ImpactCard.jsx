@@ -1,4 +1,3 @@
-
 import { Heart } from "lucide-react";
 
 function ImpactCard({ familiesSupported, foodKits }) {
@@ -43,6 +42,7 @@ function ImpactRow({ label, value }) {
   const available =
     value !== null &&
     value !== undefined &&
+    value !== "" &&
     Number.isFinite(Number(value));
 
   return (
@@ -56,8 +56,10 @@ function ImpactRow({ label, value }) {
         {label}
       </span>
 
-      <span className="text-[14px] font-semibold text-[#004D43] sm:text-[17px]">
-        {available ? Number(value).toLocaleString("fr-FR") : "—"}
+      <span className="text-[12px] font-semibold text-[#004D43] sm:text-[14px]">
+        {available
+          ? Number(value).toLocaleString("fr-FR")
+          : "Non disponible"}
       </span>
     </div>
   );
