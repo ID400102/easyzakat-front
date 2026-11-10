@@ -7,8 +7,9 @@ import {
   Building2,
   HandHeart,
   BarChart3,
+  Shield,
+  Send,
   Settings,
-  X,
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
@@ -21,6 +22,9 @@ const icons = {
   Building2,
   HandHeart,
   BarChart3,
+  Shield,
+  Send,
+  Settings,
 };
 
 function Sidebar({
@@ -156,23 +160,23 @@ function Sidebar({
         </nav>
 
         {/* Paramètres en bas */}
-        {hasPermission("settings:read") && (
+        {/* {hasPermission("settings:read") && (
           <Link
             to="/admin/parametres"
             onClick={onClose}
-            className={`mt-auto flex items-center gap-2 rounded-md px-2 py-2 text-[9px] ${
+            className={`mt-auto flex items-center gap-2 rounded-md px-2 py-2 text-xl ${
               location.pathname === "/admin/parametres"
                 ? "bg-[#075b45] text-white"
                 : "text-[#344842] hover:bg-white"
             }`}
           >
-            <Settings size={13} />
-            <span>Settings</span>
+            <Settings size={20} />
+            <span>Parametres</span>
           </Link>
-        )}
+        )} */}
 
         {/* Déconnexion facultative */}
-        {onLogout && (
+        {/* {onLogout && (
           <button
             type="button"
             onClick={onLogout}
@@ -180,7 +184,7 @@ function Sidebar({
           >
             Déconnexion
           </button>
-        )}
+        )} */}
       </aside>
     </>
   );
