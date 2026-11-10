@@ -2,16 +2,16 @@
 import { Routes, Route } from "react-router-dom";
 import Reports from "../../pages/public/Reports";
 
-import Home from "../../pages/public/Home";
-import CalculZakat from "../../pages/public/CalculZakat";
-import Impact from "../../pages/public/Impact";
-import DonationType from "../../pages/public/DonationType";
-import DonationSpace from "../../pages/public/DonationSpace";
-import Cause from "../../pages/public/Cause";
-import Landing from "../../pages/public/Landing";
-import CampaignDetails from "../../pages/public/CampaignDetails";
-import Payment from "../../pages/public/Payment";
-import Confirm from "../../pages/public/Confirm";
+import Home from "../../pages/client/Home";
+import CalculZakat from "../../pages/client/CalculZakat";
+import Impact from "../../pages/client/Impact";
+import DonationType from "../../pages/client/DonationType";
+import DonationSpace from "../../pages/client/DonationSpace";
+import Cause from "../../pages/client/Cause";
+import Landing from "../../pages/client/Landing";
+// import CampaignDetails from "../../pages/client/CampaignDetails";
+import Payment from "../../pages/client/Payment";
+import Confirm from "../../pages/client/Confirm";
 
 function UserRoutes() {
   return (
@@ -38,9 +38,7 @@ function UserRoutes() {
         path="/campaigns/:id"
         element={<CampaignDetails />}
       />
-
-      {/* Paiement */}
-      <Route path="/payment" element={<Payment />} />
+      
 
       {/* Confirmation */}
       <Route path="/confirm" element={<Confirm />} />

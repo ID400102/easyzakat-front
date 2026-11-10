@@ -6,14 +6,13 @@ import {
   Clock3,
 } from "lucide-react";
 
-import Sidebar from "../../components/admin//dashboard/Sidebar";
 import DashboardHeader from "../../components/admin/dashboard/DashboardHeader";
 import StatCard from "../../components/admin/dashboard/StatCard";
 import CollectionChart from "../../components/admin/dashboard/CollectionChart";
 import PaymentRow from "../../components/admin/dashboard/PaymentRow";
 import MobilePaymentCard from "../../components/admin/dashboard/PaymentCard";
 
-import { menuItems, payments } from "../../Data/adminData";
+import { payments } from "../../Data/adminData";
 
 function AdminDashboard() {
   const [search, setSearch] = useState("");
@@ -26,12 +25,11 @@ function AdminDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-[#f8f8fc] text-[#123b32]">
-      <Sidebar menuItems={menuItems} />
+    <div className="min-h-screen  rounded-2xl text-[#123b32]">
 
-      <main className="min-h-screen pb-20 md:ml-[135px] md:pb-0 lg:ml-[140px] xl:ml-[145px]">
+      <main className="min-h-screen pb-20 md:px-10">
 
-        <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5 md:px-6 md:py-6 lg:px-7 xl:px-8">
+        <div className="mx-auto max-w-300 px-4 py-5 sm:px-5 md:px-6 md:py-6 lg:px-7 xl:px-8">
           
           <DashboardHeader />
 
@@ -91,7 +89,7 @@ function AdminDashboard() {
                 Donation by Method
               </h3>
 
-              <div className="mx-auto mt-5 h-[125px] w-[125px] rounded-full bg-[conic-gradient(#075b45_0deg_140deg,#c4aa31_140deg_212deg,#d8d8d8_212deg_360deg)]" />
+              <div className="mx-auto mt-5 h-31.25 w-31.25 rounded-full bg-[conic-gradient(#075b45_0deg_140deg,#c4aa31_140deg_212deg,#d8d8d8_212deg_360deg)]" />
               
               <div className="mt-5 space-y-2 text-[8px]">
                 <div className="flex justify-between">

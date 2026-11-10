@@ -5,32 +5,32 @@ export const menuItems = [
     path: "/admin",
   },
   {
-    name: "Donors",
+    name: "Donateurs",
     icon: "Users",
     path: "/admin/donors",
   },
   {
-    name: "Payments",
+    name: "Paiements",
     icon: "CreditCard",
     path: "/admin/payments",
   },
   {
-    name: "Campaigns",
+    name: "Campagnes",
     icon: "Megaphone",
     path: "/admin/campaigns",
   },
   {
-    name: "Orgs",
+    name: "Organisations",
     icon: "Building2",
     path: "/admin/orgs",
   },
   {
-    name: "Beneficiaries",
+    name: "Beneficiaires",
     icon: "HandHeart",
     path: "/beneficiaries",
   },
   {
-    name: "Reports",
+    name: "Rapports",
     icon: "BarChart3",
     path: "/admin/reports",
   },
