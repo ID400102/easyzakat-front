@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Header from "../../layouts/Header";
@@ -8,6 +9,7 @@ import ZakatNote from "../../components/Client/Zakat/ZakatNote";
 import Recapitulatif from "../../components/Client/Zakat/Recapitulatif";
 import Footer from "../../layouts/Footer";
 import BottomNav from "../../layouts/BottomNav";
+
 import {
   calculateZakat as calculateZakatAPI
 } from "../../services/Api";
@@ -36,20 +38,7 @@ function CalculZakat() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ==========================================
-  // VÉRIFIER LA CONNEXION
-  // ==========================================
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate]);
-
-  // ==========================================
   // MODIFIER LES CHAMPS
-  // ==========================================
   const handleChange = (name, value) => {
     setForm((prev) => ({
       ...prev,
@@ -57,10 +46,22 @@ function CalculZakat() {
     }));
   };
 
-  // ==========================================
-  // CALCULER LA ZAKAT AVEC LE BACKEND
-  // ==========================================
+  // CALCULER LA ZAKAT
   const calculateZakat = async () => {
+    const token = localStorage.getItem("token");
+
+    // Vérifier si le visiteur a déjà utilisé son premier calcul
+    const alreadyCalculated =
+      localStorage.getItem("easyzakat_guest_calculation_used") === "true";
+
+    // Deuxième calcul : connexion obligatoire
+    if (!token && alreadyCalculated) {
+      navigate("/login", {
+        state: { from: "/calculer-zakat" },
+      });
+      return;
+    }
+
     try {
       setLoading(true);
       setError("");
@@ -83,13 +84,24 @@ function CalculZakat() {
 
       console.log("Résultat Zakat :", data);
 
-      // Résultat provenant du backend
       const result = data.result;
+
+      if (!result) {
+        throw new Error("Le résultat du calcul est introuvable.");
+      }
 
       setTotalActifs(result.totalAssets || 0);
       setDettes(result.totalDebts || 0);
       setAssiette(result.zakatableAmount || 0);
       setZakat(result.zakatAmount || 0);
+
+      // Enregistrer le premier calcul du visiteur
+      if (!token) {
+        localStorage.setItem(
+          "easyzakat_guest_calculation_used",
+          "true"
+        );
+      }
 
     } catch (err) {
       console.error("Erreur calcul Zakat :", err);
@@ -102,9 +114,7 @@ function CalculZakat() {
     }
   };
 
-  // ==========================================
   // ALLER VERS LES CAUSES
-  // ==========================================
   const handleDonate = () => {
     if (!zakat || zakat <= 0) {
       setError(

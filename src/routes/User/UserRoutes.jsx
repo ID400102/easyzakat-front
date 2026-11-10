@@ -1,6 +1,7 @@
 
-import { Routes, Route } from "react-router-dom";
-import Reports from "../../pages/public/Reports";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Reports from "../../pages/client/Reports";
+import CampaignDetails from "../../pages/client/CampaignDetails";
 
 import Home from "../../pages/client/Home";
 import CalculZakat from "../../pages/client/CalculZakat";
@@ -9,7 +10,6 @@ import DonationType from "../../pages/client/DonationType";
 import DonationSpace from "../../pages/client/DonationSpace";
 import Cause from "../../pages/client/Cause";
 import Landing from "../../pages/client/Landing";
-// import CampaignDetails from "../../pages/client/CampaignDetails";
 import Payment from "../../pages/client/Payment";
 import Confirm from "../../pages/client/Confirm";
 
@@ -45,6 +45,9 @@ function UserRoutes() {
 
       {/* Impact */}
       <Route path="/impact" element={<Impact />} />
+
+      {/* Payment */}
+      <Route path="/payment" element={<Payment />} />
 
       {/* Espace donateur */}
       <Route path="/profil" element={<DonationSpace />} />

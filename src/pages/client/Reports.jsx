@@ -2,7 +2,7 @@
 import Header from "../../layouts/Header";
 import BottomNav from "../../layouts/BottomNav";
 import Footer from "../../layouts/Footer";
-import ImpactReports from "../../components/Impact/ImpactReports";
+import ImpactReports from "../../components/Client/Impact/ImpactReports";
 
 function Reports() {
   return (

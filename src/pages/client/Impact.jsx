@@ -1,3 +1,5 @@
+import { useState,useEffect } from "react";
+
 import ImpactStats from "../../components/Client/Impact/ImpactStats";
 import MiniStats from "../../components/Client/Impact/MiniStats";
 import CategoryDistribution from "../../components/Client/Impact/CategoryDistribution";
