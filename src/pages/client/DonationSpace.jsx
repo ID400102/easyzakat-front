@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../services/Api";
 import { useState,useEffect } from "react";
 import { DEFAULT_DASHBOARD_DATA } from "../../components/client/DonationSpace/SpaceData";
 
@@ -39,7 +40,7 @@ function DonorDashboard() {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/dashboard/donor",
+        `${API_URL}/dashboard/donor`,
           {
             method: "GET",
             headers: {

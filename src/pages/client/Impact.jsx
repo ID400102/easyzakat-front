@@ -1,4 +1,5 @@
 import { useState,useEffect } from "react";
+import { API_URL } from "../../services/Api";
 
 import ImpactStats from "../../components/Client/Impact/ImpactStats";
 import MiniStats from "../../components/Client/Impact/MiniStats";
@@ -24,7 +25,7 @@ export default function ImpactPage() {
         setError("");
 
         const response = await fetch(
-          "http://localhost:5000/api/impact"
+          `${API_URL}/impact`
         );
 
         const result = await response.json();
