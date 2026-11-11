@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -12,26 +13,38 @@ function DonationType() {
   const location = useLocation();
 
   // Informations reçues depuis la page Details
- const {
-  campaignId,
-  campaignName,
-  campaignOrganization,
-  donationAmount,
-  donationType,
-} = location.state || {};
+  const state = location.state || {};
+
+  const campaignId =
+    state.campaignId ||
+    state.campaign?._id ||
+    state.campaign?.id ||
+    null;
+
+  const campaignName =
+    state.campaignName ||
+    state.campaignTitle ||
+    state.campaign?.name ||
+    state.campaign?.title ||
+    state.campaign?.campaignName ||
+    "";
+
+  const campaignOrganization =
+    state.campaignOrganization ||
+    state.campaign?.organization?.name ||
+    "";
+
+  const donationAmount = state.donationAmount ?? state.amount ?? "";
+  const donationType = state.donationType || null;
 
   // Montant
-  const [amount, setAmount] = useState(
-    donationAmount || ""
-  );
+  const [amount, setAmount] = useState(donationAmount);
 
   // Don anonyme
   const [anonymous, setAnonymous] = useState(false);
 
   // Type sélectionné
-  const [selectedType, setSelectedType] = useState(
-    donationType || null
-  );
+  const [selectedType, setSelectedType] = useState(donationType);
 
   // Changement du montant
   const handleAmountChange = (event) => {
@@ -55,34 +68,28 @@ function DonationType() {
       return;
     }
 
-    if (!amount || Number(amount) <= 0) {
+    if (!amount || !Number.isFinite(Number(amount)) || Number(amount) <= 0) {
       alert("Veuillez entrer un montant valide.");
       return;
     }
 
-  navigate("/payment", {
-  state: {
-    campaignId,
-    campaignName,
-    campaignOrganization,
-    amount: Number(amount),
-    donationType: selectedType,
-    anonymous,
-  },
-});
+    navigate("/payment", {
+      state: {
+        campaignId,
+        campaignName,
+        campaignOrganization,
+        amount: Number(amount),
+        donationType: selectedType,
+        anonymous,
+      },
+    });
   };
 
   return (
     <div>
       <Header />
 
-      <main
-        className="
-          min-h-screen
-          w-full
-          bg-[#F8F8FC]
-        "
-      >
+      <main className="min-h-screen w-full bg-[#F8F8FC]">
         <div
           className="
             mx-auto
@@ -91,23 +98,16 @@ function DonationType() {
             px-[34px]
             pb-10
             pt-[30px]
-
             sm:px-6
             sm:pt-10
-
             md:px-8
-
             lg:px-10
             lg:pt-12
           "
         >
-          {/* ================= INTRODUCTION ================= */}
-
           <div className="mt-2">
             <TypeIntro />
           </div>
-
-          {/* ================= LISTE DES TYPES DE DONS ================= */}
 
           <div className="mt-8">
             <TypeList
@@ -115,8 +115,6 @@ function DonationType() {
               onTypeSelect={handleTypeSelect}
             />
           </div>
-
-          {/* ================= FORMULAIRE DU MONTANT ================= */}
 
           <div className="mt-8">
             <AmountForm

@@ -7,65 +7,70 @@ const reports = [
   {
     title: "Campagne Ramadan 2026",
     description:
-      "Rapport complet sur la collecte et distribution des repas et kits alimentaires.",
+      "Rapport de démonstration sur la collecte et la distribution des repas et kits alimentaires.",
     image: ramadanImage,
     size: "4.2 MB",
+    file: "/reports/ramadan-2026.pdf",
   },
   {
     title: "Bilan Annuel Zakat 2026",
     description:
-      "Analyse financière globale et impact social sur les 14 régions du Sénégal.",
+      "Rapport de démonstration sur les indicateurs financiers et l'impact social.",
     image: bilanImage,
     size: "8.1 MB",
+    file: "/reports/bilan-zakat-2026.pdf",
   },
   {
     title: "Programme Éducation 2026",
     description:
-      "Impact du fonds de scolarité sur l'autonomisation des jeunes étudiants.",
+      "Rapport de démonstration sur le suivi d'un programme d'aide à la scolarité.",
     image: educationImage,
     size: "3.5 MB",
+    file: "/reports/education-2026.pdf",
   },
 ];
 
 function ReportCard({ report }) {
   return (
     <article className="overflow-hidden rounded-2xl bg-white shadow-sm">
-
-      {/* Image */}
       <div className="relative aspect-video overflow-hidden">
         <img
           src={report.image}
           alt={report.title}
           className="h-full w-full object-cover"
         />
-
         <span className="absolute left-3 top-3 rounded-full bg-[#0F3D2E] px-3 py-1 text-[11px] font-bold text-white">
-          PDF • {report.size}
+          PDF • Démonstration
         </span>
       </div>
 
-      {/* Contenu */}
       <div className="p-5">
-
-        <h3 className="font-bold text-[#0F3D2E]">
-          {report.title}
-        </h3>
+        <h3 className="font-bold text-[#0F3D2E]">{report.title}</h3>
 
         <p className="mt-2 text-sm leading-5 text-gray-500">
           {report.description}
         </p>
 
-        <button
-          type="button"
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-[#0F3D2E] px-4 py-3 text-sm font-bold text-[#0F3D2E] transition hover:bg-[#E7F8EE]"
-        >
-          <Eye size={17} />
+        <div className="mt-5 flex gap-2">
+          <a
+            href={report.file}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#0F3D2E] px-3 py-3 text-sm font-bold text-[#0F3D2E] transition hover:bg-[#E7F8EE]"
+          >
+            <Eye size={17} />
+            Voir
+          </a>
 
-          Voir le rapport
-
-          <Download size={16} />
-        </button>
-
+          <a
+            href={report.file}
+            download
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0F3D2E] px-3 py-3 text-sm font-bold text-white transition hover:bg-[#15543F]"
+          >
+            <Download size={16} />
+            Télécharger
+          </a>
+        </div>
       </div>
     </article>
   );
@@ -74,17 +79,13 @@ function ReportCard({ report }) {
 export default function ImpactReports() {
   return (
     <section className="mt-10">
-
-      {/* Titre */}
       <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-
         <div>
           <h2 className="text-2xl font-extrabold text-[#0F3D2E]">
             Rapports d'impact détaillés
           </h2>
-
           <p className="mt-1 text-sm text-gray-500">
-            Consultez nos rapports financiers audités et transparents.
+            Consultez nos rapports de démonstration et de transparence.
           </p>
         </div>
 
@@ -92,23 +93,15 @@ export default function ImpactReports() {
           to="/rapports"
           className="flex items-center gap-1 text-sm font-bold text-[#0F3D2E]"
         >
-          Tout voir
-          <ArrowRight size={16} />
+          Tout voir <ArrowRight size={16} />
         </Link>
-
       </div>
 
-      {/* Cartes */}
       <div className="grid gap-5 md:grid-cols-3">
         {reports.map((report) => (
-          <ReportCard
-            key={report.title}
-            report={report}
-          />
+          <ReportCard key={report.title} report={report} />
         ))}
       </div>
-
     </section>
   );
 }
-

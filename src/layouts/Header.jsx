@@ -1,13 +1,52 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+
+// Déterminer la destination selon la session actuelle
+function getHomePath() {
+  const token = localStorage.getItem("token");
+
+  let user = null;
+
+  try {
+    user = JSON.parse(localStorage.getItem("user") || "null");
+  } catch {
+    user = null;
+  }
+
+  // Visiteur non connecté
+  if (!token || !user) {
+    return "/";
+  }
+
+  const role = String(user.role || "").toLowerCase();
+
+  // Administrateur
+  if (role === "admin" || role === "superadmin") {
+    return "/admin";
+  }
+
+  // Donateur connecté
+  return "/home";
+}
 
 function Header() {
+  const navigate = useNavigate();
+
+  // Calculer la destination au clic, et non uniquement au rendu
+  const handleHomeClick = (event) => {
+    event.preventDefault();
+    navigate(getHomePath());
+  };
+
+  const homePath = getHomePath();
+
   return (
-    <header className="sticky top-0 border-b border-gray-100 bg-white w-full z-50 ">
+    <header className="sticky top-0 border-b border-gray-100 bg-white w-full z-50">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-10 lg:px-14">
 
         {/* Logo */}
         <Link
-          to="/Home"
+          to={homePath}
+          onClick={handleHomeClick}
           className="flex items-center gap-2"
         >
           <span className="text-lg font-extrabold text-[#0F3D2E]">
@@ -18,8 +57,10 @@ function Header() {
         {/* Navigation desktop */}
         <nav className="hidden items-center gap-16 md:flex pr-20">
 
+          {/* Accueil */}
           <NavLink
-            to="/Home"
+            to={homePath}
+            onClick={handleHomeClick}
             end
             className={({ isActive }) =>
               `relative text-sm font-medium transition ${
@@ -40,6 +81,7 @@ function Header() {
             )}
           </NavLink>
 
+          {/* Calculer */}
           <NavLink
             to="/calculer-zakat"
             className={({ isActive }) =>
@@ -61,6 +103,7 @@ function Header() {
             )}
           </NavLink>
 
+          {/* Impact */}
           <NavLink
             to="/impact"
             className={({ isActive }) =>
@@ -82,6 +125,7 @@ function Header() {
             )}
           </NavLink>
 
+          {/* Profil */}
           <NavLink
             to="/profil"
             className={({ isActive }) =>
@@ -104,12 +148,9 @@ function Header() {
           </NavLink>
 
         </nav>
-
-      
       </div>
     </header>
   );
 }
 
 export default Header;
-

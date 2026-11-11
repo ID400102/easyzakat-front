@@ -1,10 +1,17 @@
+
 import { LockKeyhole } from "lucide-react";
-import { Link } from "react-router-dom";
 
 function DonationSummary({
   donation,
   onPay,
+  loading = false,
 }) {
+  const amount = Number(donation?.amount || 0);
+  const serviceFee = Number(donation?.serviceFee || 0);
+  const total = Number(donation?.total ?? amount + serviceFee);
+
+  const isValidAmount = Number.isFinite(amount) && amount > 0;
+
   return (
     <section
       className="
@@ -15,7 +22,6 @@ function DonationSummary({
       "
     >
       {/* Header */}
-
       <div
         className="
           bg-[#005B4F]
@@ -35,37 +41,34 @@ function DonationSummary({
       </div>
 
       {/* Details */}
-
       <div className="px-5 py-5">
         <div className="space-y-4">
           <SummaryRow
             label="Type"
-            value={donation.type}
+            value={donation?.type || "Non précisé"}
           />
 
           <SummaryRow
             label="Cause"
-            value={donation.cause}
+            value={donation?.campaignName || donation?.cause || "Aucune cause sélectionnée"}
           />
 
           <SummaryRow
             label="Montant"
-            value={`${formatAmount(donation.amount)} FCFA`}
+            value={`${formatAmount(amount)} FCFA`}
           />
 
           <SummaryRow
             label="Frais de service"
-            value={`${formatAmount(donation.serviceFee)} FCFA`}
+            value={`${formatAmount(serviceFee)} FCFA`}
             valueClassName="text-[#39806D]"
           />
         </div>
 
         {/* Separator */}
-
         <div className="my-5 h-px bg-[#E3E7E5]" />
 
         {/* Total */}
-
         <div className="flex items-center justify-between gap-4">
           <span
             className="
@@ -84,15 +87,15 @@ function DonationSummary({
               text-[#005B4F]
             "
           >
-            {formatAmount(donation.total)} FCFA
+            {formatAmount(total)} FCFA
           </span>
         </div>
 
         {/* Pay button */}
-
-        <Link
-          to="/confirm"
+        <button
+          type="button"
           onClick={onPay}
+          disabled={loading || !isValidAmount}
           className="
             mt-7
             flex
@@ -111,6 +114,8 @@ function DonationSummary({
             duration-200
             hover:bg-[#003F37]
             active:scale-[0.98]
+            disabled:cursor-not-allowed
+            disabled:opacity-60
           "
         >
           <LockKeyhole
@@ -118,11 +123,12 @@ function DonationSummary({
             strokeWidth={2}
           />
 
-          <span>Payer maintenant</span>
-        </Link>
+          <span>
+            {loading ? "Traitement en cours..." : "Payer maintenant"}
+          </span>
+        </button>
 
         {/* Security text */}
-
         <p
           className="
             mt-7
@@ -169,11 +175,11 @@ function SummaryRow({
       <span
         className={`
           max-w-[58%]
+          break-words
           text-right
           text-[12px]
           font-semibold
           text-[#303634]
-
           ${valueClassName}
         `}
       >
