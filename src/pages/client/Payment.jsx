@@ -148,17 +148,29 @@ async function handlePay() {
     setLoading(true);
     setError("");
 
-    const donationPayload = {
-      type: donationType,
-      amount: Number(amount),
-      anonymous: formData.anonymous,
-      paymentMethod: selectedMethod,
-      campaign:
-        campaignId &&
-        /^[0-9a-fA-F]{24}$/.test(String(campaignId))
-          ? campaignId
-          : null,
-    };
+    const nameParts = fullName.split(" ").filter(Boolean);
+
+const donationPayload = {
+  type: donationType,
+  amount: Number(amount),
+  anonymous: formData.anonymous,
+  paymentMethod: selectedMethod,
+
+  campaign:
+    campaignId &&
+    /^[0-9a-fA-F]{24}$/.test(String(campaignId))
+      ? campaignId
+      : null,
+
+  guestInfo: {
+    firstName: nameParts[0] || "",
+    lastName: nameParts.slice(1).join(" "),
+    email,
+    phone,
+  },
+};
+
+    
 
     const donationResponse = await createDonation(donationPayload);
 
