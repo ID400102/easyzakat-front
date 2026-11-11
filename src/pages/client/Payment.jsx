@@ -188,11 +188,13 @@ const donationPayload = {
     }
 
     const paymentResponse = await createPayment({
-      donation: donationId,
-      provider: selectedMethod,
-      fees: 0,
-    });
+  donation: donationId,
+  provider: selectedMethod,
+  fees: 0,
+  guestPaymentToken: donationResponse.guestPaymentToken,
+});
 
+    
     const createdPayment =
       paymentResponse.payment ||
       paymentResponse.data ||
