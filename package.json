@@ -3,12 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
-  },
+ "scripts": {
+  "dev": "vite --mode development",
+  "build": "vite build --mode production",
+  "build:local": "vite build --mode development",
+  "preview": "vite preview",
+  "preview:local": "vite preview --mode development"
+},
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "html2canvas-pro": "^2.5.2",

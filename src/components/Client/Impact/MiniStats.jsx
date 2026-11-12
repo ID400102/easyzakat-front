@@ -15,6 +15,7 @@ function MiniCard({ icon: Icon, title, value, gold }) {
 
       <div>
         <p className="text-xs text-gray-500">{title}</p>
+
         <p className="text-xl font-bold text-[#0F3D2E]">
           {value}
         </p>
@@ -23,23 +24,36 @@ function MiniCard({ icon: Icon, title, value, gold }) {
   );
 }
 
-export default function MiniStats() {
+export default function MiniStats({
+  stats = null,
+  loading = false,
+}) {
+  const beneficiariesCount = stats?.beneficiariesCount;
+  const organizationsCount = stats?.organizationsCount;
+
+  const formatCount = (value) => {
+    if (loading) return "...";
+    if (value === undefined || value === null) return "—";
+
+    return new Intl.NumberFormat("fr-FR").format(
+      Number(value)
+    );
+  };
+
   return (
     <section className="mt-4 grid gap-4 md:w-2/3 md:grid-cols-2">
-
       <MiniCard
         icon={Users}
         title="Bénéficiaires"
-        value="12,450+"
+        value={formatCount(beneficiariesCount)}
       />
 
       <MiniCard
         icon={Handshake}
         title="Partenaires"
-        value="48"
+        value={formatCount(organizationsCount)}
         gold
       />
-
     </section>
   );
 }

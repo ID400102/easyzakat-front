@@ -32,12 +32,15 @@ export const DEFAULT_DASHBOARD_DATA = {
     firstName: "Bonjour",
   },
 
+
   donationStats: {
-    totalDonated: 1245000,
-    annualChange: 12,
-    familiesSupported: 3,
-    foodKits: 12,
-  },
+  totalDonated: 0,
+  annualChange: 0,
+  familiesSupported: 0,
+  foodKits: 0
+},
+
+ 
 
   recentDonations: [
     {

@@ -28,17 +28,41 @@ const INITIAL_FORM_DATA = {
 function Payment() {
   const location = useLocation();
   const navigate = useNavigate();
-  const campaignName = location.state?.campaignName || "";
-const campaignOrganization =
-  location.state?.campaignOrganization || "";
+  console.log("ÉTAT REÇU DANS PAYMENT :", location.state);
+console.log(
+  "CAMPAGNE ENREGISTRÉE :",
+  localStorage.getItem("easyzakat_selected_campaign")
+);
 
-  // Informations reçues depuis /type
-  const {
-    campaignId,
-    amount,
-    donationType,
-    anonymous,
-  } = location.state || {};
+const state = location.state || {};
+
+const savedCampaign = (() => {
+  try {
+    return JSON.parse(
+      localStorage.getItem("easyzakat_selected_campaign") || "null"
+    );
+  } catch {
+    return null;
+  }
+})();
+
+const campaignId = state.campaignId ?? savedCampaign?.id ?? null;
+
+const campaignName =
+  state.campaignName ||
+  savedCampaign?.name ||
+  savedCampaign?.title ||
+  "";
+
+const campaignOrganization =
+  state.campaignOrganization ||
+  savedCampaign?.organization ||
+  "";
+
+const amount = state.amount;
+const donationType = state.donationType;
+const anonymous = state.anonymous;
+
 
   const [formData, setFormData] = useState({
     ...INITIAL_FORM_DATA,
@@ -51,14 +75,15 @@ const campaignOrganization =
   const [error, setError] = useState("");
 
   // Don affiché dans le résumé
-  const donation = {
-    type: donationType || "zakat",
-    cause: campaignId || "Cause sélectionnée",
-    amount: Number(amount || 0),
-    serviceFee: 0,
-    total: Number(amount || 0),
-    anonymous: formData.anonymous,
-  };
+   const donation = {
+  type: donationType || "zakat",
+  cause: campaignName || "Cause non précisée",
+  campaignName,
+  amount: Number(amount || 0),
+  serviceFee: 0,
+  total: Number(amount || 0),
+  anonymous: formData.anonymous,
+};
 
   function handleFormChange(field, value) {
     setFormData(function (currentData) {
@@ -73,140 +98,141 @@ const campaignOrganization =
     setSelectedMethod(methodId);
   }
 
-  async function handlePay() {
-    try {
-      setLoading(true);
-      setError("");
 
-      // Vérification montant
-      if (!amount || Number(amount) <= 0) {
-        setError("Le montant du don est invalide.");
-        return;
-      }
+async function handlePay() {
+  const fullName = formData.fullName.trim();
+  const phone = formData.phone.trim();
+  const email = formData.email.trim();
+  const city = formData.city.trim();
 
-      // Vérification type
-      if (!donationType) {
-        setError("Veuillez sélectionner un type de don.");
-        return;
-      }
+  // Vérifier le montant
+  if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
+    setError("Veuillez saisir un montant valide.");
+    return;
+  }
 
-      // ============================
-      // 1. CRÉER LE DON
-      // ============================
+  // Vérifier le type de don
+  if (!donationType) {
+    setError("Veuillez sélectionner un type de don.");
+    return;
+  }
 
-      const donationPayload = {
-        type: donationType,
-        amount: Number(amount),
-        anonymous: formData.anonymous,
-        paymentMethod: selectedMethod,
+  // Vérifier les coordonnées
+  if (!fullName || !phone || !email || !city) {
+    setError(
+      "Veuillez remplir votre nom complet, téléphone, e-mail et ville."
+    );
+    return;
+  }
 
-        // On envoie campaign seulement
-        // si c'est un vrai ObjectId MongoDB
-        campaign:
-          campaignId &&
-          /^[0-9a-fA-F]{24}$/.test(String(campaignId))
-            ? campaignId
-            : null,
-      };
+  // Vérifier le format de l'e-mail
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setError("Veuillez saisir une adresse e-mail valide.");
+    return;
+  }
 
-      console.log(
-        "📤 Création du don :",
-        donationPayload
+  // Vérifier le téléphone
+  const phoneDigits = phone.replace(/\D/g, "");
+
+  if (phoneDigits.length < 8 || phoneDigits.length > 15) {
+    setError("Veuillez saisir un numéro de téléphone valide.");
+    return;
+  }
+
+  if (!selectedMethod) {
+    setError("Veuillez sélectionner une méthode de paiement.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+    setError("");
+
+    const nameParts = fullName.split(" ").filter(Boolean);
+
+const donationPayload = {
+  type: donationType,
+  amount: Number(amount),
+  anonymous: formData.anonymous,
+  paymentMethod: selectedMethod,
+
+  campaign:
+    campaignId &&
+    /^[0-9a-fA-F]{24}$/.test(String(campaignId))
+      ? campaignId
+      : null,
+
+  guestInfo: {
+    firstName: nameParts[0] || "",
+    lastName: nameParts.slice(1).join(" "),
+    email,
+    phone,
+  },
+};
+
+    
+
+    const donationResponse = await createDonation(donationPayload);
+
+    const createdDonation =
+      donationResponse.donation ||
+      donationResponse.data ||
+      donationResponse;
+
+    const donationId = createdDonation._id || createdDonation.id;
+
+    if (!donationId) {
+      throw new Error(
+        "L'identifiant du don n'a pas été retourné par le backend."
       );
+    }
 
-      const donationResponse =
-        await createDonation(donationPayload);
-
-      console.log(
-        "✅ Don créé :",
-        donationResponse
-      );
-
-      const createdDonation =
-        donationResponse.donation ||
-        donationResponse.data ||
-        donationResponse;
-
-      const donationId =
-        createdDonation._id ||
-        createdDonation.id;
-
-      if (!donationId) {
-        throw new Error(
-          "L'identifiant du don n'a pas été retourné par le backend."
-        );
-      }
-
-      // ============================
-      // 2. CRÉER LE PAIEMENT
-      // ============================
-
-     const paymentPayload = {
+    const paymentResponse = await createPayment({
   donation: donationId,
   provider: selectedMethod,
   fees: 0,
-};
-
-      console.log(
-        "📤 Création du paiement :",
-        paymentPayload
-      );
-
-      const paymentResponse =
-        await createPayment(paymentPayload);
-
-      console.log(
-        "✅ Paiement créé :",
-        paymentResponse
-      );
-
-      const createdPayment =
-        paymentResponse.payment ||
-        paymentResponse.data ||
-        paymentResponse;
-
-      const paymentId =
-        createdPayment._id ||
-        createdPayment.id;
-
-      if (!paymentId) {
-        throw new Error(
-          "L'identifiant du paiement n'a pas été retourné par le backend."
-        );
-      }
-
-      // ============================
-      // 3. ALLER À LA CONFIRMATION
-      // ============================
-
-navigate("/confirm", {
-  state: {
-    paymentId,
-    amount: Number(createdPayment.amount ?? amount),
-    paymentMethod: createdPayment.provider || selectedMethod,
-    donationType,
-    campaignId,
-    campaignName,
-    campaignOrganization,
-    anonymous: formData.anonymous,
-    paymentStatus: createdPayment.status,
-    paymentDate: createdPayment.createdAt,
-  },
+  guestPaymentToken: donationResponse.guestPaymentToken,
 });
-    } catch (err) {
-      console.error(
-        "❌ Erreur paiement :",
-        err
-      );
 
-      setError(
-        err.message ||
-        "Une erreur est survenue pendant le paiement."
+    
+    const createdPayment =
+      paymentResponse.payment ||
+      paymentResponse.data ||
+      paymentResponse;
+
+    const paymentId = createdPayment._id || createdPayment.id;
+
+    if (!paymentId) {
+      throw new Error(
+        "L'identifiant du paiement n'a pas été retourné par le backend."
       );
-    } finally {
-      setLoading(false);
     }
+
+    navigate("/confirm", {
+      state: {
+        paymentId,
+        amount: Number(createdPayment.amount ?? amount),
+        paymentMethod: createdPayment.provider || selectedMethod,
+        donationType,
+        campaignId,
+        campaignName,
+        campaignOrganization,
+        anonymous: formData.anonymous,
+        donor: { fullName, phone, email, city },
+        paymentStatus: createdPayment.status,
+        paymentDate: createdPayment.createdAt,
+      },
+    });
+  } catch (err) {
+    console.error("Erreur paiement :", err);
+    setError(
+      err.message || "Une erreur est survenue pendant le paiement."
+    );
+  } finally {
+    setLoading(false);
   }
+}
+
 
   return (
     <main
